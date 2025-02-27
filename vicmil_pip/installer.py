@@ -90,6 +90,32 @@ class GoogleDriveZipPackage:
         print("Installing package from google drive")
         self._download_file_and_unzip(self.drive_url)
 
+package_info = \
+"""
+// Instructions
+(not added yet) python vicmil.py install gcc // explains how to install gcc
+
+// Util
+(not added yet) python vicmil.py install util-pysetup // usefull for setting up projects
+(not added yet) python vicmil.py install util-hpp // util files for c++
+(not added yet) python vicmil.py install util-mkdocs // util files for setting up mkdocs to write documentation 
+(not added yet) python vicmil.py install cpp-build // build c++ projects using python 
+
+// Other Code/libraries
+(not added yet) python vicmil.py install opengl // c++ graphics library
+(not added yet) python vicmil.py install SDL2 // c++ graphics library
+(not added yet) python vicmil.py install socketIO // c++ networking 
+(not added yet) python vicmil.py install emscripten // c++ web compiler
+python vicmil.py install stb // c++ load images and fonts
+(not added yet) python vicmil.py install glm // c++ linear algebra
+python vicmil.py install miniz // c++ zip
+(not added yet) python vicmil.py install tiny-obj-loader // c++ load obj files
+
+// Assets
+(not added yet) python vicmil.py install vit-b // segmentation model for python
+(not added yet) python vicmil.py install roboto-mono // font
+(not added yet) python vicmil.py install obj-model // example obj model
+"""
 
 package_general = {
     "stb":  GoogleDriveZipPackage("https://drive.google.com/file/d/1e3W8Zlyajzh-3W5CNYjxxbOJtaqBAgVP/view?usp=drive_link"),
@@ -113,7 +139,7 @@ def list_packages():
         if f == "__pycache__":
             continue
         folders.append(f)
-        
+
     print(f"found {len(folders)} installed packages")
     print(folders)
 

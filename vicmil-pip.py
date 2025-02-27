@@ -127,6 +127,14 @@ if __name__ == "__main__":
         import vicmil_pip.installer
 
         vicmil_pip.installer.list_packages()
+
+    if arguments[0] == "packages":
+        if not installer_exists():
+            install_installer()
+
+        import vicmil_pip.installer
+
+        print(vicmil_pip.installer.package_info)
     
 
     if arguments[0] == "help":
@@ -142,31 +150,8 @@ Commands:
 python vicmil.py help // prints help and info
 python vicmil.py update // updates vicmil.py to latest version
 python vicmil.py remove … // remove a package
-(not added yet) python vicmil.py list // lists installed vicmil packages
+python vicmil.py list // lists installed vicmil packages
+python vicmil.py packages // list all available packages with more info
 (not added yet) python vicmil.py install -r vicmil-requirements.txt // install all vicmil packages from file
-
-// Instructions
-(not added yet) python vicmil.py install gcc // explains how to install gcc
-
-// Util
-(not added yet) python vicmil.py install util-pysetup // usefull for setting up projects
-(not added yet) python vicmil.py install util-hpp // util files for c++
-(not added yet) python vicmil.py install util-mkdocs // util files for setting up mkdocs to write documentation 
-(not added yet) python vicmil.py install cpp-build // build c++ projects using python 
-
-// Other Code/libraries
-(not added yet) python vicmil.py install opengl // c++ graphics library
-(not added yet) python vicmil.py install SDL2 // c++ graphics library
-(not added yet) python vicmil.py install socketIO // c++ networking 
-(not added yet) python vicmil.py install emscripten // c++ web compiler
-python vicmil.py install stb // c++ load images and fonts
-(not added yet) python vicmil.py install glm // c++ linear algebra
-python vicmil.py install miniz // c++ zip
-(not added yet) python vicmil.py install tiny-obj-loader // c++ load obj files
-
-// Assets
-(not added yet) python vicmil.py install vit-b // segmentation model for python
-(not added yet) python vicmil.py install roboto-mono // font
-(not added yet) python vicmil.py install obj-model // example obj model
 """
         print(help_str)
