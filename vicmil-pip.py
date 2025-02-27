@@ -75,6 +75,13 @@ def installer_exists():
         return True
     return False
 
+def update_vicmil_pip():
+    # Download the latest features into this file
+    with urllib.request.urlopen('https://raw.githubusercontent.com/vicmil-work/vicmil-pip/refs/heads/main/vicmil-pip.py') as f:
+        html = f.read().decode('utf-8')
+        with open(__file__, "w") as this_file: # Create install file
+            this_file.write(html)
+
 
 if __name__ == "__main__":
     arguments: list = sys.argv[1:]
@@ -99,7 +106,11 @@ if __name__ == "__main__":
             vicmil_pip.installer.force_install(arguments[1])
         
     if arguments[0] == "update":
+        print("upgrade vicmil_pip/installer.py")
         install_installer()
+        print("upgrade current file")
+        update_vicmil_pip()
+
 
     if arguments[0] == "list":
         pass # Not implemented yet
