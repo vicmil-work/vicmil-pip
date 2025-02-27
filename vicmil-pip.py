@@ -9,7 +9,7 @@ python vicmil-pip.py help
 python3 vicmil-pip.py help 
 
 # Documentation
-https://vicmil.uk/packages
+https://vicmil.uk/vicmil-pip
 
 
 
@@ -18,12 +18,12 @@ When you install something, a map called vicmil/ will be created, where all pack
     you install will be stored. Nothing external will be installed on your computer.
 
 The idea is for all the packages to be cross-platform(windows, linux, mac), so the thing
-    you actually install may vary depending on platform. The idea is for all packages to
-    use a permissive licence, so they can be used in commercial applications. Read more
-    about specific packages at: https://vicmil.uk/packages
+    that actually gets installed may vary depending on platform. The idea is for all packages 
+    to use a permissive licence, so they can be used in commercial applications. Read more
+    about specific packages at: https://vicmil.uk/vicmil-pip
 
-You can also opt-out of using vicmil-lib but still use the packages by navigating to
-    https://vicmil.uk/packages, there you will find install instructions for installing
+You can also opt-out of using vicmil-pip but still use the packages by navigating to
+    https://vicmil.uk/vicmil-pip, there you will find install instructions for installing
     the packages manually and read more about where they came from.
 
 This is the main file, and the only thing you need to use vicmil-pip
