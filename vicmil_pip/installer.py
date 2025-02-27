@@ -104,6 +104,28 @@ package_linux = {
 
 }
 
+def list_packages():
+    dirs = os.listdir(get_directory_path(__file__, 0))           
+    folders = list()
+    for f in dirs:
+        if not os.path.isdir(os.path.join(get_directory_path(__file__, 0), f)):
+            continue
+        if f == "__pycache__":
+            continue
+        folders.append(f)
+        
+    print(f"found {len(folders)} installed packages")
+    print(folders)
+
+def remove(package_name: str):
+    if os.path.exists(get_directory_path(__file__, 0) + f"/{package_name}"):
+        print(f"Removing package {package_name}")
+        delete_folder_with_contents(get_directory_path(__file__, 0) + f"/{package_name}")
+        print("Done!")
+    else:
+        print(f"Could not remove package. Package {package_name} does not exist")
+
+
 def force_install(package_name: str):
     if os.path.exists(get_directory_path(__file__, 0) + f"/{package_name}"):
         print("Removing old installation...")

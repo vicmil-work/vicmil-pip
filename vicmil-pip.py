@@ -111,26 +111,39 @@ if __name__ == "__main__":
         print("upgrade current file")
         update_vicmil_pip()
 
+    if arguments[0] == "remove":
+        if not installer_exists():
+            install_installer()
+
+        import vicmil_pip.installer
+
+        if len(arguments) > 1:
+            vicmil_pip.installer.remove(arguments[1])
 
     if arguments[0] == "list":
-        pass # Not implemented yet
-    if arguments[0] == "remove":
-        pass # Not implemented yet
+        if not installer_exists():
+            install_installer()
+
+        import vicmil_pip.installer
+
+        vicmil_pip.installer.list_packages()
+    
+
     if arguments[0] == "help":
         help_str = \
 """
 vicmil-pip is a package manager for installing things, much like pip in python
 (but with other things such as utility files and other things that may not be related to python)
 
-Visit vicmil.uk/docs for general info
+(not added yet) Visit vicmil.uk/docs for general info
 (not added yet) Visit vicmil.uk/package for more info about packages
 
 Commands:
 python vicmil.py help // prints help and info
-(not added yet) python vicmil.py update // updates vicmil.py to latest version
+python vicmil.py update // updates vicmil.py to latest version
+python vicmil.py remove … // remove a package
 (not added yet) python vicmil.py list // lists installed vicmil packages
 (not added yet) python vicmil.py install -r vicmil-requirements.txt // install all vicmil packages from file
-(not added yet) python vicmil.py remove … // remove a package
 
 // Instructions
 (not added yet) python vicmil.py install gcc // explains how to install gcc
@@ -146,9 +159,9 @@ python vicmil.py help // prints help and info
 (not added yet) python vicmil.py install SDL2 // c++ graphics library
 (not added yet) python vicmil.py install socketIO // c++ networking 
 (not added yet) python vicmil.py install emscripten // c++ web compiler
-(not added yet) python vicmil.py install stb // c++ load images and fonts
+python vicmil.py install stb // c++ load images and fonts
 (not added yet) python vicmil.py install glm // c++ linear algebra
-(not added yet) python vicmil.py install miniz // c++ zip
+python vicmil.py install miniz // c++ zip
 (not added yet) python vicmil.py install tiny-obj-loader // c++ load obj files
 
 // Assets
