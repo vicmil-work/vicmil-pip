@@ -1,0 +1,4 @@
+vicmil_pip/*
+!vicmil_pip/__init__*
+!vicmil_pip/.gitignore
+!vicmil_pip/installer.py
