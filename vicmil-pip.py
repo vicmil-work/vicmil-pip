@@ -30,14 +30,64 @@ This is the main file, and the only thing you need to use vicmil-pip
 """
 
 import sys
+import pathlib
+import os
+import urllib.request
+
+def path_traverse_up(path: str, count: int) -> str:
+    """Traverse the provided path upwards
+
+    Parameters
+    ----------
+        path (str): The path to start from, tips: use __file__ to get path of the current file
+        count (int): The number of directories to go upwards
+
+    Returns
+    -------
+        str: The path after the traversal, eg "/some/file/path"
+    """
+
+    parents = pathlib.Path(path).parents
+    path_raw = str(parents[count].resolve())
+    return path_raw.replace("\\", "/")
+
+def install_installer():
+    vicmil_pip_path = path_traverse_up(__file__, 0) + "/vicmil_pip"
+    if not os.path.exists(vicmil_pip_path):
+        os.makedirs(vicmil_pip_path, exist_ok=True)
+
+    if not os.path.exists(vicmil_pip_path+ "/__init__.py"):
+        with open(vicmil_pip_path + "/__init__.py", "w") as _: # Create the file
+            pass
+
+    with urllib.request.urlopen('https://raw.githubusercontent.com/vicmil-work/vicmil-pip/refs/heads/main/vicmil-installer.py') as f:
+        html = f.read().decode('utf-8')
+        with open(vicmil_pip_path + "/installer.py", "w") as install_file: # Create install file
+            install_file.write(html)
+
+def installer_exists():
+    vicmil_pip_path = path_traverse_up(__file__, 0) + "/vicmil_pip"
+    if os.path.exists(vicmil_pip_path + "/installer.py"):
+        return True
+    return False
+
 
 if __name__ == "__main__":
     arguments: list = sys.argv[1:]
     print(arguments)
+
     if arguments[0] == "install":
-        pass # Not implemented yet
+        if not installer_exists():
+            install_installer()
+
+        import vicmil_pip.installer
+
+        if len(arguments) > 1:
+            vicmil_pip.installer.install(arguments[1])
+        
     if arguments[0] == "update":
-        pass # Not implemented yet
+        install_installer()
+
     if arguments[0] == "list":
         pass # Not implemented yet
     if arguments[0] == "remove":
