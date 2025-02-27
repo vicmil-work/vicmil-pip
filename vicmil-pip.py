@@ -57,8 +57,12 @@ def install_installer():
         os.makedirs(vicmil_pip_path, exist_ok=True)
 
     if not os.path.exists(vicmil_pip_path+ "/__init__.py"):
-        with open(vicmil_pip_path + "/__init__.py", "w") as _: # Create the file
+        with open(vicmil_pip_path + "/__init__.py", "w") as _: # Create the init file
             pass
+
+    if not os.path.exists(vicmil_pip_path+ "/.gitignore"):
+        with open(vicmil_pip_path + "/.gitignore", "w") as file_: # Create the gitignore file
+            file_.write("__pycache__*")
 
     with urllib.request.urlopen('https://raw.githubusercontent.com/vicmil-work/vicmil-pip/refs/heads/main/vicmil-installer.py') as f:
         html = f.read().decode('utf-8')
@@ -84,6 +88,15 @@ if __name__ == "__main__":
 
         if len(arguments) > 1:
             vicmil_pip.installer.install(arguments[1])
+
+    if arguments[0] == "force-install":
+        if not installer_exists():
+            install_installer()
+
+        import vicmil_pip.installer
+
+        if len(arguments) > 1:
+            vicmil_pip.installer.force_install(arguments[1])
         
     if arguments[0] == "update":
         install_installer()
