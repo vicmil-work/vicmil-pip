@@ -185,9 +185,10 @@ python3 vicmil-pip.py update
         print(package_not_found)
 
 
-def install(package_name: str):
+def install(package_name: str, debug=True):
     if os.path.exists(get_directory_path(__file__, 0) + f"/{package_name}"):
-        package_already_exists = \
+        if debug:
+            package_already_exists = \
 f"""
 package {package_name} already exists!
 
@@ -196,7 +197,9 @@ python vicmil-pip.py force-install {package_name}
     or
 python3 vicmil-pip.py force-install {package_name} 
 """
-        print(package_already_exists)
+            print(package_already_exists)
+        else:
+            print(f"package {package_name} already exists!")
         return
     else:
         force_install(package_name)

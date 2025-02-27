@@ -93,7 +93,27 @@ if __name__ == "__main__":
 
         import vicmil_pip.installer
 
-        if len(arguments) > 1:
+        if len(arguments) == 2 and arguments[1] == "-r":
+            print("You need to specify a file to install from file")
+
+        if len(arguments) > 2 and arguments[1] == "-r":
+            print("Installing from requirements file")
+            # open file and iterate through it line by line
+            # install each package on each line
+            filename = arguments[2]
+            try:
+                with open(filename, "r") as file:
+                    for line in file:
+                        vicmil_pip.installer.install(line.strip(), debug=False)
+
+            except FileNotFoundError:
+                print(f"Error: The file '{filename}' was not found.")
+            except Exception as e:
+                print(f"An error occurred: {e}")
+
+            print("Done!")
+
+        elif len(arguments) > 1:
             vicmil_pip.installer.install(arguments[1])
 
     if arguments[0] == "force-install":
@@ -143,15 +163,14 @@ if __name__ == "__main__":
 vicmil-pip is a package manager for installing things, much like pip in python
 (but with other things such as utility files and other things that may not be related to python)
 
-(not added yet) Visit vicmil.uk/docs for general info
-(not added yet) Visit vicmil.uk/package for more info about packages
+(not added yet) Visit https://vicmil.uk/vicmil-pip for more info
 
 Commands:
-python vicmil.py help // prints help and info
-python vicmil.py update // updates vicmil.py to latest version
-python vicmil.py remove … // remove a package
-python vicmil.py list // lists installed vicmil packages
-python vicmil.py packages // list all available packages with more info
-(not added yet) python vicmil.py install -r vicmil-requirements.txt // install all vicmil packages from file
+python3 vicmil-pip.py help // prints help and info
+python3 vicmil-pip.py update // updates vicmil.py to latest version
+python3 vicmil-pip.py remove … // remove a package
+python3 vicmil-pip.py list // lists installed vicmil packages
+python3 vicmil-pip.py packages // list all available packages with more info
+python3 vicmil-pip.py install -r vicmil-requirements.txt // install all vicmil packages from file
 """
         print(help_str)
