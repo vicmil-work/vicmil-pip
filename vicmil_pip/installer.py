@@ -146,6 +146,9 @@ class GoogleDriveZipPackage:
         else:
             self._download_large_file_from_google_drive(file_id, destination=temp_zip)
 
+        if not os.path.exists(temp_zip):
+            raise Exception("ERROR: download failed!")
+
         # Unzip file to folder and delete zip
         print("unzipping package...")
         try:
@@ -201,16 +204,19 @@ package_general = {
     "miniz": GoogleDriveZipPackage("https://drive.google.com/file/d/16YkWE2GwYB8gQxQmmEJOQ2fwyjcAnh3S/view?usp=drive_link"),
     "glm": GoogleDriveZipPackage("https://drive.google.com/file/d/1_HlE1QI6W6X_NNZzTZE5YdeFcRXNa8Ei/view?usp=drive_link"),
     "tiny-obj-loader": GoogleDriveZipPackage("https://drive.google.com/file/d/1PLCBebGr_kuzzxSbUnJgJN8O6Kn_fpL9/view?usp=drive_link"),
-    "socket.io-client-cpp": GoogleDriveZipPackage("https://drive.google.com/file/d/1lH9CF9kTNqbS6BdUKrwcQJybUeWVlzjX/view?usp=drive_link"),
+    "socket.io-client-cpp": GoogleDriveZipPackage("https://drive.google.com/file/d/1lH9CF9kTNqbS6BdUKrwcQJybUeWVlzjX/view?usp=drive_link", large=True),
 }
 
 package_windows = {
     "gcc": ManualInstallFromWebpage("https://code.visualstudio.com/docs/cpp/config-mingw"),
+    "emsdk": GoogleDriveZipPackage("https://drive.google.com/file/d/1bYu_jhoHGCNVD9WTA79SoBsj9NAESYsw/view?usp=drive_link", large=True),
+    "sdl-opengl": GoogleDriveZipPackage("https://drive.google.com/file/d/1RJS3ciVAHyfCJ8btsjTx6I5ArHYfOczG/view?usp=drive_link", large=True),
 }
 
 package_linux = {
     "gcc": ManualInstallFromWebpage("https://medium.com/@adwalkz/demystifying-development-a-guide-to-build-essential-in-ubuntu-for-seamless-software-compilation-b590b5a298bb"),
-    "emsdk": GoogleDriveZipPackage("https://drive.google.com/file/d/1YJOSAtA0lOfuWHxL6ZxptuoHlZliXsin/view?usp=drive_link", large=True)
+    "emsdk": GoogleDriveZipPackage("https://drive.google.com/file/d/1YJOSAtA0lOfuWHxL6ZxptuoHlZliXsin/view?usp=drive_link", large=True),
+    "sdl-opengl": ManualInstallFromWebpage("https://github.com/vicmil-work/docs_common/blob/master/docs_common/docs/cpp_opengl.md"),
 }
 
 def list_packages():
