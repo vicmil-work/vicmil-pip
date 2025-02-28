@@ -92,6 +92,26 @@ if __name__ == "__main__":
     arguments: list = sys.argv[1:]
     print(arguments)
 
+    if len(arguments) == 0 or arguments[0] == "help":
+        help_str = \
+"""
+vicmil-pip is a package manager for installing things, much like pip in python
+(but with other things such as utility files and other things that may not be related to python)
+
+(not added yet) Visit https://vicmil.uk/vicmil-pip for more info
+
+Commands:
+python3 vicmil-pip.py help // prints help and info
+python3 vicmil-pip.py update // updates vicmil.py to latest version
+python3 vicmil-pip.py install … // Install a package
+python3 vicmil-pip.py remove … // remove a package
+python3 vicmil-pip.py install -r vicmil-requirements.txt // install all vicmil packages listed in file
+python3 vicmil-pip.py list // lists installed vicmil packages
+python3 vicmil-pip.py packages // list all available packages with more info
+"""
+        print(help_str)
+        exit(0)
+
     if arguments[0] == "install":
         if not installer_exists():
             install_installer()
@@ -161,22 +181,3 @@ if __name__ == "__main__":
 
         print(vicmil_pip.installer.package_info)
     
-
-    if arguments[0] == "help":
-        help_str = \
-"""
-vicmil-pip is a package manager for installing things, much like pip in python
-(but with other things such as utility files and other things that may not be related to python)
-
-(not added yet) Visit https://vicmil.uk/vicmil-pip for more info
-
-Commands:
-python3 vicmil-pip.py help // prints help and info
-python3 vicmil-pip.py update // updates vicmil.py to latest version
-python3 vicmil-pip.py install … // Install a package
-python3 vicmil-pip.py remove … // remove a package
-python3 vicmil-pip.py install -r vicmil-requirements.txt // install all vicmil packages listed in file
-python3 vicmil-pip.py list // lists installed vicmil packages
-python3 vicmil-pip.py packages // list all available packages with more info
-"""
-        print(help_str)
