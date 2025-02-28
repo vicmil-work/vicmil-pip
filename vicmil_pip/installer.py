@@ -106,6 +106,20 @@ def use_other_venv_if_missing(package_name, other_venv_path):
         sys.path.insert(0, other_venv_path)  # Add other venv's site-packages to sys.path
 
 
+def run_command(command: str) -> None:
+    """Run a command in the terminal"""
+    platform_name = platform.system()
+    if platform_name == "Windows": # Windows
+        print("running command: ", f'powershell; &{command}')
+        if command[0] != '"':
+            os.system(f'powershell; {command}')
+        else:
+            os.system(f'powershell; &{command}')
+    else:
+        print("running command: ", f'{command}')
+        os.system(command)
+
+
 class GoogleDriveZipPackage:
     def __init__(self, drive_url, large=False):
         self.drive_url = drive_url
@@ -238,6 +252,24 @@ class InstallFromGitRepo:
         delete_file(temp_zip)
 
 
+class EmsdkInstall:
+    def __init__(self):
+        pass
+
+    def install(self):
+        git_installer = InstallFromGitRepo("https://github.com/emscripten-core/emsdk/archive/refs/heads/main.zip", package_name="emsdk/emsdk")
+        git_installer.install()
+        my_os = platform.system()
+        if my_os == "Linux":
+            emsdk_path = "" + get_directory_path(__file__, 0) + "/emsdk/emsdk/emsdk"
+            run_command('chmod +x "' + emsdk_path + '"')
+            run_command('"' + emsdk_path + '" install latest')
+            run_command('"' + emsdk_path + '" activate latest')
+        elif my_os == "Windows":
+            pass
+        
+
+
 package_info = \
 """
 // Instructions
@@ -270,6 +302,7 @@ package_general = {
     "tiny-obj-loader": GoogleDriveZipPackage("https://drive.google.com/file/d/1PLCBebGr_kuzzxSbUnJgJN8O6Kn_fpL9/view?usp=drive_link"),
     "socket.io-client-cpp": GoogleDriveZipPackage("https://drive.google.com/file/d/1lH9CF9kTNqbS6BdUKrwcQJybUeWVlzjX/view?usp=drive_link", large=True),
     "util_cpp": InstallFromGitRepo("https://github.com/vicmil-work/vicmil-util/archive/refs/heads/master.zip", package_name="util_cpp"),
+    "emsdk": EmsdkInstall() # Custom installer
 }
 
 assets = {
@@ -279,13 +312,13 @@ assets = {
 
 package_windows = {
     "gcc": ManualInstallFromWebpage("https://code.visualstudio.com/docs/cpp/config-mingw"),
-    "emsdk": GoogleDriveZipPackage("https://drive.google.com/file/d/1bYu_jhoHGCNVD9WTA79SoBsj9NAESYsw/view?usp=drive_link", large=True),
+    #"emsdk": GoogleDriveZipPackage("https://drive.google.com/file/d/1bYu_jhoHGCNVD9WTA79SoBsj9NAESYsw/view?usp=drive_link", large=True),
     "sdl-opengl": GoogleDriveZipPackage("https://drive.google.com/file/d/1RJS3ciVAHyfCJ8btsjTx6I5ArHYfOczG/view?usp=drive_link", large=True),
 }
 
 package_linux = {
     "gcc": ManualInstallFromWebpage("https://medium.com/@adwalkz/demystifying-development-a-guide-to-build-essential-in-ubuntu-for-seamless-software-compilation-b590b5a298bb"),
-    "emsdk": GoogleDriveZipPackage("https://drive.google.com/file/d/1YJOSAtA0lOfuWHxL6ZxptuoHlZliXsin/view?usp=drive_link", large=True),
+    #"emsdk": GoogleDriveZipPackage("https://drive.google.com/file/d/1YJOSAtA0lOfuWHxL6ZxptuoHlZliXsin/view?usp=drive_link", large=True),
     "sdl-opengl": ManualInstallFromWebpage("https://github.com/vicmil-work/docs_common/blob/master/docs_common/docs/cpp_opengl.md"),
 }
 
