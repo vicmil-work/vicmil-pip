@@ -30,6 +30,29 @@ def unzip_file(zip_file: str, destination_folder: str):
         zip_ref.extractall(destination_folder)
 
 
+def unzip_without_top_dir(zip_file, destination_folder):
+    with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+        # Get the list of file paths in the zip
+        members = zip_ref.namelist()
+        
+        # Identify the top-level directory (assume first path element)
+        top_level_dir = os.path.commonprefix(members).rstrip('/')
+        
+        for member in members:
+            # Remove the top-level directory from the file path
+            relative_path = os.path.relpath(member, top_level_dir)
+            
+            # Compute the final extraction path
+            final_path = os.path.join(destination_folder, relative_path)
+
+            if member.endswith('/'):  # Handle directories
+                os.makedirs(final_path, exist_ok=True)
+            else:  # Extract files
+                os.makedirs(os.path.dirname(final_path), exist_ok=True)
+                with zip_ref.open(member) as src, open(final_path, 'wb') as dst:
+                    dst.write(src.read())
+
+
 def go_to_url(url: str):
     # Opens the webbrowser with the provided url
     import webbrowser
@@ -173,6 +196,48 @@ class ManualInstallFromWebpage:
         go_to_url(self.url)
 
 
+class InstallFromGitRepo:
+    def __init__(self, zip_url: str, package_name: str):
+        self.zip_url = zip_url
+        self.name = package_name
+
+    def download_github_repo(self, output_file: str):
+        """Downloads a GitHub repository as a ZIP file.
+        
+        Args:
+            repo_url (str): The URL of the GitHub repository (e.g., "https://github.com/owner/repo").
+            output_file (str): The name of the output ZIP file (e.g., "repo.zip").
+        """
+        try:
+            response = requests.get(self.zip_url, stream=True)
+            response.raise_for_status()  # Raise an error for bad responses
+            
+            with open(output_file, "wb") as file:
+                for chunk in response.iter_content(chunk_size=1024):
+                    file.write(chunk)
+            
+            print(f"Download complete: {output_file}")
+        except Exception as e:
+            print(f"Error: {e}")
+
+    def install(self):
+        temp_zip: str = get_directory_path(__file__, 0) + "/temp.zip"
+        dest_folder: str = get_directory_path(__file__, 0) + "/" + self.name
+        self.download_github_repo(temp_zip)
+
+        if not os.path.exists(temp_zip):
+            raise Exception("ERROR: download failed!")
+
+        # Unzip file to folder and delete zip
+        print("unzipping package...")
+        try:
+            unzip_without_top_dir(zip_file=temp_zip, destination_folder=dest_folder)
+        except Exception as e:
+            print("ERROR: download failed!")
+            print(e)
+        delete_file(temp_zip)
+
+
 package_info = \
 """
 // Instructions
@@ -205,6 +270,7 @@ package_general = {
     "glm": GoogleDriveZipPackage("https://drive.google.com/file/d/1_HlE1QI6W6X_NNZzTZE5YdeFcRXNa8Ei/view?usp=drive_link"),
     "tiny-obj-loader": GoogleDriveZipPackage("https://drive.google.com/file/d/1PLCBebGr_kuzzxSbUnJgJN8O6Kn_fpL9/view?usp=drive_link"),
     "socket.io-client-cpp": GoogleDriveZipPackage("https://drive.google.com/file/d/1lH9CF9kTNqbS6BdUKrwcQJybUeWVlzjX/view?usp=drive_link", large=True),
+    "util-cpp": InstallFromGitRepo("https://github.com/vicmil-work/vicmil-util/archive/refs/heads/master.zip", package_name="util-cpp"),
 }
 
 assets = {
