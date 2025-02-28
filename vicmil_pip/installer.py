@@ -266,7 +266,9 @@ class EmsdkInstall:
             run_command('"' + emsdk_path + '" install latest')
             run_command('"' + emsdk_path + '" activate latest')
         elif my_os == "Windows":
-            pass
+            emsdk_path = "" + get_directory_path(__file__, 0) + "/emsdk/emsdk/emsdk.bat"
+            run_command('"' + emsdk_path + '" install latest')
+            run_command('"' + emsdk_path + '" activate latest')
         
 
 
