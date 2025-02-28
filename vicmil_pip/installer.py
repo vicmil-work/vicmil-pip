@@ -185,17 +185,17 @@ package_info = \
 (not added yet) python vicmil.py install cpp-build // build c++ projects using python 
 
 // Other Code/libraries
-(not added yet) python vicmil.py install SDL2-opengl // c++ graphics library
-(not added yet) python vicmil.py install socketIO // c++ networking 
-(not added yet) python vicmil.py install emscripten // c++ web compiler
-python vicmil.py install stb // c++ load images and fonts
-(not added yet) python vicmil.py install glm // c++ linear algebra
-python vicmil.py install miniz // c++ zip
-(not added yet) python vicmil.py install tiny-obj-loader // c++ load obj files
+python3 vicmil.py install SDL2-opengl // c++ graphics library
+python3 vicmil.py install socket.io-client-cpp // c++ networking 
+python3 vicmil.py install emsdk // c++ web compiler(emscripten)
+python3 vicmil.py install stb // c++ load images and fonts
+python3 vicmil.py install glm // c++ linear algebra
+python3 vicmil.py install miniz // c++ zip
+python3 vicmil.py install tiny-obj-loader // c++ load obj files
 
 // Assets
+python vicmil.py install roboto-mono // font
 (not added yet) python vicmil.py install vit-b // segmentation model for python
-(not added yet) python vicmil.py install roboto-mono // font
 (not added yet) python vicmil.py install obj-model // example obj model
 """
 
@@ -205,6 +205,11 @@ package_general = {
     "glm": GoogleDriveZipPackage("https://drive.google.com/file/d/1_HlE1QI6W6X_NNZzTZE5YdeFcRXNa8Ei/view?usp=drive_link"),
     "tiny-obj-loader": GoogleDriveZipPackage("https://drive.google.com/file/d/1PLCBebGr_kuzzxSbUnJgJN8O6Kn_fpL9/view?usp=drive_link"),
     "socket.io-client-cpp": GoogleDriveZipPackage("https://drive.google.com/file/d/1lH9CF9kTNqbS6BdUKrwcQJybUeWVlzjX/view?usp=drive_link", large=True),
+}
+
+assets = {
+    "roboto-mono": GoogleDriveZipPackage("https://drive.google.com/file/d/1gKX_BT4gt2HoO4mJCRUSfsweJEuMM2c4/view?usp=drive_link", large=True),
+    "vit-b": GoogleDriveZipPackage("https://drive.google.com/file/d/1rqIjU7smbJlPVjY1VD_3uRgbVsEUizzi/view?usp=drive_link", large=True),
 }
 
 package_windows = {
@@ -250,6 +255,11 @@ def force_install(package_name: str):
     if package_name in package_general.keys():
         print(f"Installing {package_name}...")
         package_general[package_name].install()
+        print(f"Successfully installed {package_name}")
+
+    elif package_name in assets.keys():
+        print(f"Installing {package_name}...")
+        assets[package_name].install()
         print(f"Successfully installed {package_name}")
 
     elif platform_name == "Windows" and package_name in package_windows.keys():
