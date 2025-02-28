@@ -241,16 +241,15 @@ class InstallFromGitRepo:
 package_info = \
 """
 // Instructions
-(not added yet) python vicmil.py install gcc // explains how to install gcc
+python vicmil.py install gcc // explains how to install gcc
 
 // Util
-(not added yet) python vicmil.py install util-pysetup // usefull for setting up projects
-(not added yet) python vicmil.py install util-hpp // util files for c++
-(not added yet) python vicmil.py install util-mkdocs // util files for setting up mkdocs to write documentation 
-(not added yet) python vicmil.py install cpp-build // build c++ projects using python 
+python3 vicmil.py install util-cpp // util files for c++
+(not added yet) python3 vicmil.py install util-python // util files for python
+(not added yet) python3 vicmil.py install util-mkdocs // util files for writing documentation 
 
 // Other Code/libraries
-python3 vicmil.py install SDL2-opengl // c++ graphics library
+python3 vicmil.py install sdl-opengl // c++ graphics library
 python3 vicmil.py install socket.io-client-cpp // c++ networking 
 python3 vicmil.py install emsdk // c++ web compiler(emscripten)
 python3 vicmil.py install stb // c++ load images and fonts
@@ -260,8 +259,8 @@ python3 vicmil.py install tiny-obj-loader // c++ load obj files
 
 // Assets
 python vicmil.py install roboto-mono // font
-(not added yet) python vicmil.py install vit-b // segmentation model for python
-(not added yet) python vicmil.py install obj-model // example obj model
+python vicmil.py install vit-b // segmentation model for python
+(not added yet) python vicmil.py install obj-model // example .obj model
 """
 
 package_general = {
