@@ -8,6 +8,8 @@ import zipfile
 import os
 import pathlib
 import shutil
+import importlib
+import sys
 
 def get_directory_path(__file__in, up_directories):
     return str(pathlib.Path(__file__in).parents[up_directories].resolve()).replace("\\", "/")
@@ -57,9 +59,34 @@ def pip_install_packages_in_virtual_environment(env_directory_path, packages):
             os.system(f'"{env_directory_path}/bin/pip" install {package}')
 
 
+def get_site_packages_path(venv_path):
+    """Returns the site-packages path for a given virtual environment."""
+    python_version = f"python{sys.version_info.major}.{sys.version_info.minor}"
+    
+    # Construct the expected site-packages path
+    if os.name == "nt":  # Windows
+        site_packages_path = os.path.join(venv_path, "Lib", "site-packages")
+    else:  # macOS/Linux
+        site_packages_path = os.path.join(venv_path, "lib", python_version, "site-packages")
+
+    return site_packages_path if os.path.exists(site_packages_path) else None
+
+
+def use_other_venv_if_missing(package_name, other_venv_path):
+    try:
+        importlib.import_module(package_name)
+        print(f"✅ {package_name} is already installed in the current environment.")
+    except ImportError:
+        print(f"⚠️ {package_name} not found. Using the package from the other environment.")
+        other_venv_path = get_site_packages_path(other_venv_path)
+        print(other_venv_path)
+        sys.path.insert(0, other_venv_path)  # Add other venv's site-packages to sys.path
+
+
 class GoogleDriveZipPackage:
-    def __init__(self, drive_url):
+    def __init__(self, drive_url, large=False):
         self.drive_url = drive_url
+        self.large = large # large packages require special treatment using a library called gdown
 
     def _download_file_from_google_drive(self, id, destination):
         def get_confirm_token(response):
@@ -90,6 +117,16 @@ class GoogleDriveZipPackage:
 
         save_response_content(response, destination)    
 
+    def _download_large_file_from_google_drive(self, id, destination):
+        use_other_venv_if_missing("gdown", get_directory_path(__file__, 0) + "/venv")
+        import gdown
+        # Construct the direct URL
+        url = f"https://drive.google.com/uc?id={id}"
+
+        # Download the file
+        gdown.download(url, destination, quiet=False)
+
+
     def _extract_id_from_url(self, url: str):
         url2 = url.split("drive.google.com/file/d/")[1]
         file_id = url2.split("/")[0]
@@ -104,7 +141,10 @@ class GoogleDriveZipPackage:
         # Download zip from google drive
         file_id = self._extract_id_from_url(url)
         print("Downloading package...")
-        self._download_file_from_google_drive(file_id, destination=temp_zip)
+        if not self.large:
+            self._download_file_from_google_drive(file_id, destination=temp_zip)
+        else:
+            self._download_large_file_from_google_drive(file_id, destination=temp_zip)
 
         # Unzip file to folder and delete zip
         print("unzipping package...")
@@ -118,6 +158,8 @@ class GoogleDriveZipPackage:
     def install(self):
         print("Installing package from google drive")
         self._download_file_and_unzip(self.drive_url)
+    
+
 
 class ManualInstallFromWebpage:
     def __init__(self, url):
@@ -168,7 +210,7 @@ package_windows = {
 
 package_linux = {
     "gcc": ManualInstallFromWebpage("https://medium.com/@adwalkz/demystifying-development-a-guide-to-build-essential-in-ubuntu-for-seamless-software-compilation-b590b5a298bb"),
-    "emsdk-linux": GoogleDriveZipPackage("https://drive.google.com/file/d/1YJOSAtA0lOfuWHxL6ZxptuoHlZliXsin/view?usp=drive_link")
+    "emsdk": GoogleDriveZipPackage("https://drive.google.com/file/d/1YJOSAtA0lOfuWHxL6ZxptuoHlZliXsin/view?usp=drive_link", large=True)
 }
 
 def list_packages():
