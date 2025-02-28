@@ -101,8 +101,8 @@ vicmil-pip is a package manager for installing things, much like pip in python
 Commands:
 python3 vicmil-pip.py help // prints help and info
 python3 vicmil-pip.py update // updates vicmil.py to latest version
-python3 vicmil-pip.py install … // Install a package
-python3 vicmil-pip.py remove … // remove a package
+python3 vicmil-pip.py install ... // Install a package
+python3 vicmil-pip.py remove ... // remove a package
 python3 vicmil-pip.py install -r vicmil-requirements.txt // install all vicmil packages listed in file
 python3 vicmil-pip.py list // lists installed vicmil packages
 python3 vicmil-pip.py packages // list all available packages with more info

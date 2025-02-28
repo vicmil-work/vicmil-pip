@@ -98,9 +98,9 @@ def get_site_packages_path(venv_path):
 def use_other_venv_if_missing(package_name, other_venv_path):
     try:
         importlib.import_module(package_name)
-        print(f"✅ {package_name} is already installed in the current environment.")
+        print(f"{package_name} is already installed in the current environment.")
     except ImportError:
-        print(f"⚠️ {package_name} not found. Using the package from the other environment.")
+        print(f"{package_name} not found. Using the package from the other environment.")
         other_venv_path = get_site_packages_path(other_venv_path)
         print(other_venv_path)
         sys.path.insert(0, other_venv_path)  # Add other venv's site-packages to sys.path
