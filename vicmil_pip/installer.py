@@ -244,7 +244,7 @@ package_info = \
 python vicmil.py install gcc // explains how to install gcc
 
 // Util
-python3 vicmil.py install util-cpp // util files for c++
+python3 vicmil.py install util_cpp // util files for c++
 (not added yet) python3 vicmil.py install util-python // util files for python
 (not added yet) python3 vicmil.py install util-mkdocs // util files for writing documentation 
 
@@ -269,7 +269,7 @@ package_general = {
     "glm": GoogleDriveZipPackage("https://drive.google.com/file/d/1_HlE1QI6W6X_NNZzTZE5YdeFcRXNa8Ei/view?usp=drive_link"),
     "tiny-obj-loader": GoogleDriveZipPackage("https://drive.google.com/file/d/1PLCBebGr_kuzzxSbUnJgJN8O6Kn_fpL9/view?usp=drive_link"),
     "socket.io-client-cpp": GoogleDriveZipPackage("https://drive.google.com/file/d/1lH9CF9kTNqbS6BdUKrwcQJybUeWVlzjX/view?usp=drive_link", large=True),
-    "util-cpp": InstallFromGitRepo("https://github.com/vicmil-work/vicmil-util/archive/refs/heads/master.zip", package_name="util-cpp"),
+    "util_cpp": InstallFromGitRepo("https://github.com/vicmil-work/vicmil-util/archive/refs/heads/master.zip", package_name="util_cpp"),
 }
 
 assets = {
