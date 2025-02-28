@@ -56,13 +56,11 @@ def install_installer():
     if not os.path.exists(vicmil_pip_path):
         os.makedirs(vicmil_pip_path, exist_ok=True)
 
-    if not os.path.exists(vicmil_pip_path+ "/__init__.py"):
-        with open(vicmil_pip_path + "/__init__.py", "w") as _: # Create the init file
-            pass
+    with open(vicmil_pip_path + "/__init__.py", "w") as _: # Create the init file
+        pass
 
-    if not os.path.exists(vicmil_pip_path+ "/.gitignore"):
-        with open(vicmil_pip_path + "/.gitignore", "w") as file_: # Create the gitignore file
-            file_.write("__pycache__*")
+    with open(vicmil_pip_path + "/.gitignore", "w") as file_: # Create the gitignore file
+        file_.write("__pycache__*\nvenv/")
 
     with urllib.request.urlopen('https://raw.githubusercontent.com/vicmil-work/vicmil-pip/refs/heads/main/vicmil_pip/installer.py') as f:
         html = f.read().decode('utf-8')
