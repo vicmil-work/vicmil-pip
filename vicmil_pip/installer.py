@@ -28,6 +28,35 @@ def unzip_file(zip_file: str, destination_folder: str):
         zip_ref.extractall(destination_folder)
 
 
+def go_to_url(url: str):
+    # Opens the webbrowser with the provided url
+    import webbrowser
+    webbrowser.open(url, new=0, autoraise=True)
+
+
+def python_virtual_environment(env_directory_path):
+    # Setup a python virtual environmet
+    os.makedirs(env_directory_path, exist_ok=True) # Ensure directory exists
+    my_os = platform.system()
+    if my_os == "Windows":
+        os.system(f'python -m venv "{env_directory_path}"')
+    else:
+        os.system(f'python3 -m venv "{env_directory_path}"')
+
+
+def pip_install_packages_in_virtual_environment(env_directory_path, packages):
+    if not os.path.exists(env_directory_path):
+        print("Invalid path")
+        raise Exception("Invalid path")
+  
+    my_os = platform.system()
+    for package in packages:
+        if my_os == "Windows":
+            os.system(f'powershell; &"{env_directory_path}/Scripts/pip" install {package}')
+        else:
+            os.system(f'"{env_directory_path}/bin/pip" install {package}')
+
+
 class GoogleDriveZipPackage:
     def __init__(self, drive_url):
         self.drive_url = drive_url
@@ -90,6 +119,15 @@ class GoogleDriveZipPackage:
         print("Installing package from google drive")
         self._download_file_and_unzip(self.drive_url)
 
+class ManualInstallFromWebpage:
+    def __init__(self, url):
+        self.url = url
+
+    def install(self):
+        print("Manual installation required: A page with instructions should have opened")
+        go_to_url(self.url)
+
+
 package_info = \
 """
 // Instructions
@@ -102,8 +140,7 @@ package_info = \
 (not added yet) python vicmil.py install cpp-build // build c++ projects using python 
 
 // Other Code/libraries
-(not added yet) python vicmil.py install opengl // c++ graphics library
-(not added yet) python vicmil.py install SDL2 // c++ graphics library
+(not added yet) python vicmil.py install SDL2-opengl // c++ graphics library
 (not added yet) python vicmil.py install socketIO // c++ networking 
 (not added yet) python vicmil.py install emscripten // c++ web compiler
 python vicmil.py install stb // c++ load images and fonts
@@ -119,15 +156,19 @@ python vicmil.py install miniz // c++ zip
 
 package_general = {
     "stb":  GoogleDriveZipPackage("https://drive.google.com/file/d/1e3W8Zlyajzh-3W5CNYjxxbOJtaqBAgVP/view?usp=drive_link"),
-    "miniz": GoogleDriveZipPackage("https://drive.google.com/file/d/16YkWE2GwYB8gQxQmmEJOQ2fwyjcAnh3S/view?usp=drive_link")
+    "miniz": GoogleDriveZipPackage("https://drive.google.com/file/d/16YkWE2GwYB8gQxQmmEJOQ2fwyjcAnh3S/view?usp=drive_link"),
+    "glm": GoogleDriveZipPackage("https://drive.google.com/file/d/1_HlE1QI6W6X_NNZzTZE5YdeFcRXNa8Ei/view?usp=drive_link"),
+    "tiny-obj-loader": GoogleDriveZipPackage("https://drive.google.com/file/d/1PLCBebGr_kuzzxSbUnJgJN8O6Kn_fpL9/view?usp=drive_link"),
+    "socket.io-client-cpp": GoogleDriveZipPackage("https://drive.google.com/file/d/1lH9CF9kTNqbS6BdUKrwcQJybUeWVlzjX/view?usp=drive_link"),
 }
 
 package_windows = {
-
+    "gcc": ManualInstallFromWebpage("https://code.visualstudio.com/docs/cpp/config-mingw"),
 }
 
 package_linux = {
-
+    "gcc": ManualInstallFromWebpage("https://medium.com/@adwalkz/demystifying-development-a-guide-to-build-essential-in-ubuntu-for-seamless-software-compilation-b590b5a298bb"),
+    "emsdk-linux": GoogleDriveZipPackage("https://drive.google.com/file/d/1YJOSAtA0lOfuWHxL6ZxptuoHlZliXsin/view?usp=drive_link")
 }
 
 def list_packages():

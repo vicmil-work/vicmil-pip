@@ -69,6 +69,11 @@ def install_installer():
         with open(vicmil_pip_path + "/installer.py", "w") as install_file: # Create install file
             install_file.write(html)
 
+    if not os.path.exists(vicmil_pip_path+ "/venv"):
+        import vicmil_pip.installer
+        vicmil_pip.installer.python_virtual_environment(vicmil_pip_path + "/venv")
+        vicmil_pip.installer.pip_install_packages_in_virtual_environment(vicmil_pip_path + "/venv", ["gdown"])
+
 def installer_exists():
     vicmil_pip_path = path_traverse_up(__file__, 0) + "/vicmil_pip"
     if os.path.exists(vicmil_pip_path + "/installer.py"):
