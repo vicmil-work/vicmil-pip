@@ -279,7 +279,7 @@ python vicmil.py install gcc // explains how to install gcc
 
 // Util
 python3 vicmil.py install util_cpp // util files for c++
-python3 vicmil.py install vicmil_mkdocs // util files for writing documentation using mkdocs
+python3 vicmil.py install util_mkdocs // util files for writing documentation using mkdocs
 (not added yet) python3 vicmil.py install util-python // util files for python
 
 
@@ -305,7 +305,7 @@ package_general = {
     "tiny-obj-loader": GoogleDriveZipPackage("https://drive.google.com/file/d/1PLCBebGr_kuzzxSbUnJgJN8O6Kn_fpL9/view?usp=drive_link"),
     "socket.io-client-cpp": GoogleDriveZipPackage("https://drive.google.com/file/d/1lH9CF9kTNqbS6BdUKrwcQJybUeWVlzjX/view?usp=drive_link", large=True),
     "util_cpp": InstallFromGitRepo("https://github.com/vicmil-work/vicmil-util/archive/refs/heads/master.zip", package_name="util_cpp"),
-    "mkdocs": InstallFromGitRepo("https://github.com/vicmil-work/vicmil-util/archive/refs/heads/vicmil_mkdocs.zip", package_name="mkdocs"),
+    "util_mkdocs": InstallFromGitRepo("https://github.com/vicmil-work/vicmil-util/archive/refs/heads/vicmil_mkdocs.zip", package_name="util_mkdocs"),
     "emsdk": EmsdkInstall() # Custom installer
 }
 
