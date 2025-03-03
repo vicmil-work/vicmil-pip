@@ -121,9 +121,10 @@ def run_command(command: str) -> None:
 
 
 class GoogleDriveZipPackage:
-    def __init__(self, drive_url, large=False):
+    def __init__(self, drive_url, package_name: str, large=False):
         self.drive_url = drive_url
         self.large = large # large packages require special treatment using a library called gdown
+        self.name = package_name
 
     def _download_file_from_google_drive(self, id, destination):
         def get_confirm_token(response):
@@ -173,7 +174,7 @@ class GoogleDriveZipPackage:
     def _download_file_and_unzip(self, url: str):
         # Setup where the file should be downloaded
         temp_zip: str = get_directory_path(__file__, 0) + "/temp.zip"
-        dest_folder: str = get_directory_path(__file__, 0)
+        dest_folder: str = get_directory_path(__file__, 0) + "/" + self.name
 
         # Download zip from google drive
         file_id = self._extract_id_from_url(url)
@@ -189,7 +190,7 @@ class GoogleDriveZipPackage:
         # Unzip file to folder and delete zip
         print("unzipping package...")
         try:
-            unzip_file(zip_file=temp_zip, destination_folder=dest_folder)
+            unzip_without_top_dir(zip_file=temp_zip, destination_folder=dest_folder)
         except Exception as e:
             print("ERROR: download failed!")
             print(e)
@@ -202,12 +203,18 @@ class GoogleDriveZipPackage:
 
 
 class ManualInstallFromWebpage:
-    def __init__(self, url):
+    def __init__(self, url, package_name: str):
         self.url = url
+        self.name = package_name
 
     def install(self):
         print("Manual installation required: A page with instructions should have opened")
         go_to_url(self.url)
+        package_path = get_directory_path(__file__, 0) + "/" + self.name
+        os.makedirs(package_path, exist_ok=True)
+        with open(package_path + "/readme.md", "w") as file:
+            file.write("this directory is intentionally left blank\n")
+
 
 
 class InstallFromGitRepo:
@@ -284,13 +291,13 @@ python3 vicmil.py install util_mkdocs // util files for writing documentation us
 
 
 // Other Code/libraries
-python3 vicmil.py install sdl-opengl // c++ graphics library
+python3 vicmil.py install sdl_opengl // c++ graphics library
 python3 vicmil.py install socket.io-client-cpp // c++ networking 
 python3 vicmil.py install emsdk // c++ web compiler(emscripten)
 python3 vicmil.py install stb // c++ load images and fonts
 python3 vicmil.py install glm // c++ linear algebra
 python3 vicmil.py install miniz // c++ zip
-python3 vicmil.py install tiny-obj-loader // c++ load obj files
+python3 vicmil.py install tiny_obj_loader // c++ load obj files
 
 // Assets
 python vicmil.py install roboto-mono // font
@@ -299,31 +306,29 @@ python vicmil.py install vit-b // segmentation model for python
 """
 
 package_general = {
-    "stb":  GoogleDriveZipPackage("https://drive.google.com/file/d/1e3W8Zlyajzh-3W5CNYjxxbOJtaqBAgVP/view?usp=drive_link"),
-    "miniz": GoogleDriveZipPackage("https://drive.google.com/file/d/16YkWE2GwYB8gQxQmmEJOQ2fwyjcAnh3S/view?usp=drive_link"),
-    "glm": GoogleDriveZipPackage("https://drive.google.com/file/d/1_HlE1QI6W6X_NNZzTZE5YdeFcRXNa8Ei/view?usp=drive_link"),
-    "tiny-obj-loader": GoogleDriveZipPackage("https://drive.google.com/file/d/1PLCBebGr_kuzzxSbUnJgJN8O6Kn_fpL9/view?usp=drive_link"),
-    "socket.io-client-cpp": GoogleDriveZipPackage("https://drive.google.com/file/d/1lH9CF9kTNqbS6BdUKrwcQJybUeWVlzjX/view?usp=drive_link", large=True),
+    "stb":  GoogleDriveZipPackage("https://drive.google.com/file/d/1e3W8Zlyajzh-3W5CNYjxxbOJtaqBAgVP/view?usp=drive_link", package_name="stb"),
+    "miniz": GoogleDriveZipPackage("https://drive.google.com/file/d/16YkWE2GwYB8gQxQmmEJOQ2fwyjcAnh3S/view?usp=drive_link", package_name="miniz"),
+    "glm": GoogleDriveZipPackage("https://drive.google.com/file/d/1_HlE1QI6W6X_NNZzTZE5YdeFcRXNa8Ei/view?usp=drive_link", package_name="glm"),
+    "tiny_obj_loader": GoogleDriveZipPackage("https://drive.google.com/file/d/1PLCBebGr_kuzzxSbUnJgJN8O6Kn_fpL9/view?usp=drive_link", package_name="tiny_obj_loader"),
+    "socket.io-client-cpp": GoogleDriveZipPackage("https://drive.google.com/file/d/1lH9CF9kTNqbS6BdUKrwcQJybUeWVlzjX/view?usp=drive_link", large=True, package_name="socket.io-client-cpp"),
     "util_cpp": InstallFromGitRepo("https://github.com/vicmil-work/vicmil-util/archive/refs/heads/master.zip", package_name="util_cpp"),
     "util_mkdocs": InstallFromGitRepo("https://github.com/vicmil-work/vicmil-util/archive/refs/heads/vicmil_mkdocs.zip", package_name="util_mkdocs"),
     "emsdk": EmsdkInstall() # Custom installer
 }
 
 assets = {
-    "roboto-mono": GoogleDriveZipPackage("https://drive.google.com/file/d/1gKX_BT4gt2HoO4mJCRUSfsweJEuMM2c4/view?usp=drive_link", large=True),
-    "vit-b": GoogleDriveZipPackage("https://drive.google.com/file/d/1rqIjU7smbJlPVjY1VD_3uRgbVsEUizzi/view?usp=drive_link", large=True),
+    "roboto-mono": GoogleDriveZipPackage("https://drive.google.com/file/d/1gKX_BT4gt2HoO4mJCRUSfsweJEuMM2c4/view?usp=drive_link", large=True, package_name="roboto_mono"),
+    "vit-b": GoogleDriveZipPackage("https://drive.google.com/file/d/1rqIjU7smbJlPVjY1VD_3uRgbVsEUizzi/view?usp=drive_link", large=True, package_name="vit_b"),
 }
 
 package_windows = {
-    "gcc": ManualInstallFromWebpage("https://code.visualstudio.com/docs/cpp/config-mingw"),
-    #"emsdk": GoogleDriveZipPackage("https://drive.google.com/file/d/1bYu_jhoHGCNVD9WTA79SoBsj9NAESYsw/view?usp=drive_link", large=True),
-    "sdl-opengl": GoogleDriveZipPackage("https://drive.google.com/file/d/1RJS3ciVAHyfCJ8btsjTx6I5ArHYfOczG/view?usp=drive_link", large=True),
+    "gcc": ManualInstallFromWebpage("https://code.visualstudio.com/docs/cpp/config-mingw", package_name="gcc"),
+    "sdl_opengl": GoogleDriveZipPackage("https://drive.google.com/file/d/1RJS3ciVAHyfCJ8btsjTx6I5ArHYfOczG/view?usp=drive_link", large=True, package_name="sdl_opengl"),
 }
 
 package_linux = {
-    "gcc": ManualInstallFromWebpage("https://medium.com/@adwalkz/demystifying-development-a-guide-to-build-essential-in-ubuntu-for-seamless-software-compilation-b590b5a298bb"),
-    #"emsdk": GoogleDriveZipPackage("https://drive.google.com/file/d/1YJOSAtA0lOfuWHxL6ZxptuoHlZliXsin/view?usp=drive_link", large=True),
-    "sdl-opengl": ManualInstallFromWebpage("https://github.com/vicmil-work/docs_common/blob/master/docs_common/docs/cpp_opengl.md"),
+    "gcc": ManualInstallFromWebpage("https://medium.com/@adwalkz/demystifying-development-a-guide-to-build-essential-in-ubuntu-for-seamless-software-compilation-b590b5a298bb", package_name="gcc"),
+    "sdl_opengl": ManualInstallFromWebpage("https://github.com/vicmil-work/docs_common/blob/master/docs_common/docs/cpp_opengl.md", package_name="sdl_opengl"),
 }
 
 def list_packages():
