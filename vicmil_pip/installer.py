@@ -260,18 +260,24 @@ class EmsdkInstall:
         pass
 
     def install(self):
-        git_installer = InstallFromGitRepo("https://github.com/emscripten-core/emsdk/archive/refs/heads/main.zip", package_name="emsdk/emsdk")
-        git_installer.install()
         my_os = platform.system()
         if my_os == "Linux":
+            git_installer = InstallFromGitRepo("https://github.com/emscripten-core/emsdk/archive/refs/heads/main.zip", package_name="emsdk/emsdk")
+            git_installer.install()
             emsdk_path = "" + get_directory_path(__file__, 0) + "/emsdk/emsdk/emsdk"
             run_command('chmod +x "' + emsdk_path + '"')
             run_command('"' + emsdk_path + '" install latest')
             run_command('"' + emsdk_path + '" activate latest')
         elif my_os == "Windows":
-            emsdk_path = "" + get_directory_path(__file__, 0) + "/emsdk/emsdk/emsdk.bat"
-            run_command('"' + emsdk_path + '" install latest')
-            run_command('"' + emsdk_path + '" activate latest')
+            google_drive_installer = GoogleDriveZipPackage("https://drive.google.com/file/d/1bYu_jhoHGCNVD9WTA79SoBsj9NAESYsw/view?usp=drive_link", package_name="emsdk", large=True)
+            google_drive_installer.install()
+            old_name = get_directory_path(__file__, 0) + "/emsdk/emsdk-win"
+            new_name = get_directory_path(__file__, 0) + "/emsdk/emsdk"
+            os.rename(old_name, new_name)
+            #emsdk_path = "" + get_directory_path(__file__, 0) + "/emsdk/emsdk/emsdk.bat"
+            #run_command('"' + emsdk_path + '" install latest')
+            #run_command('"' + emsdk_path + '" activate latest')
+
         
 
 
