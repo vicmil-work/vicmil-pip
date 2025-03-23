@@ -10,6 +10,7 @@ import pathlib
 import shutil
 import importlib
 import sys
+import urllib.request
 
 def get_directory_path(__file__in, up_directories):
     return str(pathlib.Path(__file__in).parents[up_directories].resolve()).replace("\\", "/")
@@ -278,6 +279,29 @@ class EmsdkInstall:
             #run_command('"' + emsdk_path + '" install latest')
             #run_command('"' + emsdk_path + '" activate latest')
 
+
+class InstallSpecificUrlFiles:
+    class UrlFile:
+        def __init__(self, filename: str, url: str):
+            self.filename = filename
+            self.url = url
+            
+    def __init__(self, package_name: str, files: list):
+        self.name = package_name
+        self.files = files # List of UrlFiles
+
+    def install(self):
+        # Ensure that package directory exists
+        package_path = get_directory_path(__file__, 0) + "/" + self.name
+        os.makedirs(package_path, exist_ok=True)
+
+        # Iterate through files and download them
+        for file in self.files:
+            with urllib.request.urlopen(file.url) as f:
+                html = f.read().decode('utf-8')
+                with open(package_path + "/" + file.filename, "w") as install_file: # Create install file
+                    install_file.write(html)
+
         
 
 
@@ -315,7 +339,8 @@ package_general = {
     "socket.io-client-cpp": GoogleDriveZipPackage("https://drive.google.com/file/d/1lH9CF9kTNqbS6BdUKrwcQJybUeWVlzjX/view?usp=drive_link", large=True, package_name="socket.io-client-cpp"),
     "util_cpp": InstallFromGitRepo("https://github.com/vicmil-work/vicmil-util/archive/refs/heads/master.zip", package_name="util_cpp"),
     "util_mkdocs": InstallFromGitRepo("https://github.com/vicmil-work/vicmil-util/archive/refs/heads/vicmil_mkdocs.zip", package_name="util_mkdocs"),
-    "emsdk": EmsdkInstall() # Custom installer
+    "emsdk": EmsdkInstall(), # Custom installer
+    "json": InstallSpecificUrlFiles("json", [InstallSpecificUrlFiles.UrlFile("json.hpp", "https://raw.githubusercontent.com/vicmil-work/json/refs/heads/develop/single_include/nlohmann/json.hpp")])
 }
 
 assets = {
