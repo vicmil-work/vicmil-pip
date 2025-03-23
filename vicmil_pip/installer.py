@@ -344,8 +344,9 @@ package_general = {
 }
 
 assets = {
-    "roboto-mono": GoogleDriveZipPackage("https://drive.google.com/file/d/1gKX_BT4gt2HoO4mJCRUSfsweJEuMM2c4/view?usp=drive_link", large=True, package_name="roboto_mono"),
-    "vit-b": GoogleDriveZipPackage("https://drive.google.com/file/d/1rqIjU7smbJlPVjY1VD_3uRgbVsEUizzi/view?usp=drive_link", large=True, package_name="vit_b"),
+    "roboto_mono": GoogleDriveZipPackage("https://drive.google.com/file/d/1gKX_BT4gt2HoO4mJCRUSfsweJEuMM2c4/view?usp=drive_link", large=True, package_name="roboto_mono"),
+    "noto_sans_mono_jp": GoogleDriveZipPackage("https://drive.google.com/file/d/1X6650ZVaurvtw7y4vrL-LpaR1BiF1XW_/view?usp=drive_link", large=True, package_name="noto_sans_mono_jp"),
+    "vit_b": GoogleDriveZipPackage("https://drive.google.com/file/d/1rqIjU7smbJlPVjY1VD_3uRgbVsEUizzi/view?usp=drive_link", large=True, package_name="vit_b"),
 }
 
 package_windows = {
